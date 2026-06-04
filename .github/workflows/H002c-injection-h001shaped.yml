@@ -1,0 +1,21 @@
+# LAB VICTIM (H002c) — bisect of H002. Same structure as the WORKING H001 template
+# (checkout of PR head, types [opened, synchronize]) but the sink is an echo of the
+# PR title. If THIS runs as pull_request_target, H002's failure was the extra types
+# / missing checkout, not the title-in-run construct.
+name: Lab Title Echo H001-shaped
+
+on:
+  pull_request_target:
+    types: [opened, synchronize]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      LAB_SECRET: ${{ secrets.LAB_SECRET }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Greet
+        run: echo Thanks for the PR titled ${{ github.event.pull_request.title }}
